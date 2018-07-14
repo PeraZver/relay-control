@@ -12,12 +12,14 @@ relay = LED(17)
 GAIN = 1
 AIN = 2
 AIN_LOW = 11100
-AIN_HIGH = 27750
+AIN_HIGH = 25750
 
 batteryEmpty = False
 
 print('Reading ADS1x15 values, press Ctrl-C to quit...')
 
+# Default relay state: grid:
+relay.off()
 
 while True:
 	
@@ -29,17 +31,17 @@ while True:
 		else:		
 			print('Battery is getting empty. Switching to grid supply.')
 			batteryEmpty = True
-			relay.on()
+			relay.off()
 	
 	elif (batteryVoltage > AIN_HIGH):
 		if batteryEmpty:			
 			print('It seems like battery is fully charged and back on.')
 			batteryEmpty = False
-			relay.off()
+			relay.on()
 		else:
 			print('Battery charged and working normally.')
 			
 	else:
-		print('Battery charging ... Voltage: {.2}'.format(batteryVoltage))
+		print('Battery charging ... Voltage: {}'.format(batteryVoltage))
 	
 	time.sleep(1)
