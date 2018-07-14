@@ -8,7 +8,7 @@ import argparse
 adc = Adafruit_ADS1x15.ADS1115()
 GAIN = 1
 AIN = 3
-AIN_TRESH = 1000
+AIN_TRESH = 10000
 
 
 # LED strip configuration:
@@ -88,22 +88,26 @@ if __name__ == '__main__':
     # Intialize the library (must be called once before other functions).
     strip.begin()
 	
-	print('Reading ADS1x15 values, press Ctrl-C to quit...')
+    print('Reading ADS1x15 values, press Ctrl-C to quit...')
 
     try:
         while True:
-            print ('Color wipe animations.')
-            colorWipe(strip, Color(255, 0, 0))  # Red wipe
-            colorWipe(strip, Color(0, 255, 0))  # Blue wipe
-            colorWipe(strip, Color(0, 0, 255))  # Green wipe
-            print ('Theater chase animations.')
-            theaterChase(strip, Color(127, 127, 127))  # White theater chase
-            theaterChase(strip, Color(127,   0,   0))  # Red theater chase
-            theaterChase(strip, Color(  0,   0, 127))  # Blue theater chase
-            print ('Rainbow animations.')
-            rainbow(strip)
-            rainbowCycle(strip)
-            theaterChaseRainbow(strip)
+			
+			if (adc.read_adc(AIN, gain=GAIN) > AIN_TRESH):
+				#print ('Color wipe animations.')
+				#colorWipe(strip, Color(255, 0, 0))  # Red wipe
+				#colorWipe(strip, Color(0, 255, 0))  # Blue wipe
+				#colorWipe(strip, Color(0, 0, 255))  # Green wipe
+				#print ('Theater chase animations.')
+				#theaterChase(strip, Color(127, 127, 127))  # White theater chase
+				#theaterChase(strip, Color(127,   0,   0))  # Red theater chase
+				#theaterChase(strip, Color(  0,   0, 127))  # Blue theater chase
+				print ('Rainbow animations.')
+				#rainbow(strip)
+				rainbowCycle(strip)
+				#theaterChaseRainbow(strip)
+			else:
+				colorWipe(strip, Color(0,0,0), 10)
 
     except KeyboardInterrupt:
         print('User interruption')
